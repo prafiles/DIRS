@@ -17,8 +17,12 @@ setInterval(function () {
     followRedirect: true,
     maxRedirects: 3
   }, function (error, response, body) {
-    if (body != '')
+    if (error)
+      console.log(error);
+    else if (body != '') {
       console.log(body);
+      prompt();
+    }
   });
 }, 1000);
 
@@ -29,7 +33,6 @@ function prompt() {
       process.exit(0);
     else {
       sendRequest(answer);
-      prompt();
     }
   });
 }
@@ -42,7 +45,7 @@ function sendRequest(command) {
     followRedirect: true,
     maxRedirects: 3
   }, function (error, response, body) {
-    if(error)
+    if (error)
       console.log(error);
     else if (body != 'Success')
       console.log('Shit happens.');

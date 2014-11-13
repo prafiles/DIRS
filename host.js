@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/getCommand', function (req, res) {
-  console.log('GET command from id=' + req.param("id"));
+//  console.log('GET command from id=' + req.param("id"));
   var cmd = command.split(';');
   res.send(cmd[0]);
   command = '';
@@ -24,8 +24,8 @@ app.get('/getCommand', function (req, res) {
 });
 
 app.post('/postExecute', function (req, res) {
-  console.log('POST Execute Results from id=' + req.body.id
-      + ' Error=' + req.body.error+ ' StdOut=' + req.body.stdout+ ' StdErr=' + req.body.stderr);
+  console.log('POST Execute Results from id=' + req.body.id + ' Output=' + req.body.output);
+  output += req.body.output;
   res.send('Success');
 });
 
